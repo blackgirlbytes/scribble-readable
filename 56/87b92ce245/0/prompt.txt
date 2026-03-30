@@ -1,0 +1,17 @@
+Let's create a Javascript project that can convert handwriting into typed text..especially if it was someone that wrote scribbles. Let's make a plan first before going forward
+
+---
+
+i dont want to use a claude api key or any api key to be honest.
+
+---
+
+how does it view the handwritten text? do i just hold up the paper to the screen
+
+---
+
+live camera feed..why cant it translate in real time as well
+
+---
+
+the only other thing is for every change you make..make commits and push as you go. you can use the gh cli
