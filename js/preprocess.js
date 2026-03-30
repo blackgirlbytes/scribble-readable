@@ -22,8 +22,9 @@ const Preprocess = (() => {
     const data = imageData.data;
 
     grayscale(data);
-    adjustContrast(data, 60);
-    binarize(data, 128);
+    adjustContrast(data, 30);
+    const threshold = otsuThreshold(data);
+    binarize(data, threshold);
 
     ctx.putImageData(imageData, 0, 0);
     return offscreen;
@@ -43,6 +44,49 @@ const Preprocess = (() => {
       data[i + 1] = clamp(factor * (data[i + 1] - 128) + 128);
       data[i + 2] = clamp(factor * (data[i + 2] - 128) + 128);
     }
+  }
+
+  /**
+   * Otsu's method — finds the optimal binarization threshold by minimizing
+   * intra-class variance. Adapts to each image instead of using a fixed cutoff.
+   */
+  function otsuThreshold(data) {
+    const histogram = new Array(256).fill(0);
+    const totalPixels = data.length / 4;
+
+    for (let i = 0; i < data.length; i += 4) {
+      histogram[data[i]]++;
+    }
+
+    let sum = 0;
+    for (let i = 0; i < 256; i++) {
+      sum += i * histogram[i];
+    }
+
+    let sumB = 0;
+    let weightB = 0;
+    let maxVariance = 0;
+    let bestThreshold = 128;
+
+    for (let t = 0; t < 256; t++) {
+      weightB += histogram[t];
+      if (weightB === 0) continue;
+
+      const weightF = totalPixels - weightB;
+      if (weightF === 0) break;
+
+      sumB += t * histogram[t];
+      const meanB = sumB / weightB;
+      const meanF = (sum - sumB) / weightF;
+      const variance = weightB * weightF * (meanB - meanF) * (meanB - meanF);
+
+      if (variance > maxVariance) {
+        maxVariance = variance;
+        bestThreshold = t;
+      }
+    }
+
+    return bestThreshold;
   }
 
   function binarize(data, threshold) {
