@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scribble Readable</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Scribble Readable</h1>
+    <p class="tagline">Turn messy handwriting into typed text — right from your camera</p>
+  </header>
+
+  <nav class="mode-tabs">
+    <button class="tab active" data-mode="camera">Live Camera</button>
+    <button class="tab" data-mode="upload">Upload Image</button>
+  </nav>
+
+  <main>
+    <!-- Camera Mode -->
+    <section id="camera-mode" class="mode active">
+      <div class="camera-container">
+        <div class="video-wrapper">
+          <video id="video" autoplay playsinline></video>
+          <canvas id="frame-canvas" hidden></canvas>
+          <div id="camera-placeholder" class="placeholder">
+            <p>Camera feed will appear here</p>
+            <p class="hint">Allow camera access to get started</p>
+          </div>
+        </div>
+        <div class="camera-controls">
+          <button id="start-camera" class="btn btn-primary">Start Camera</button>
+          <button id="stop-camera" class="btn btn-secondary" disabled>Stop</button>
+          <select id="camera-select">
+            <option value="environment">Back Camera</option>
+            <option value="user">Front Camera</option>
+          </select>
+        </div>
+        <div class="ocr-controls">
+          <button id="start-ocr" class="btn btn-primary" disabled>Start Reading</button>
+          <button id="stop-ocr" class="btn btn-secondary" disabled>Stop Reading</button>
+          <span id="ocr-status" class="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload Mode -->
+    <section id="upload-mode" class="mode">
+      <div class="upload-container">
+        <div id="drop-zone" class="drop-zone">
+          <p>Drag & drop an image here</p>
+          <p class="hint">or click to select a file</p>
+          <input type="file" id="file-input" accept="image/*" hidden>
+        </div>
+        <div id="image-preview-wrapper" class="image-preview-wrapper" hidden>
+          <img id="image-preview" alt="Uploaded handwriting">
+          <button id="clear-image" class="btn btn-secondary">Clear</button>
+        </div>
+        <button id="convert-btn" class="btn btn-primary" hidden>Convert to Text</button>
+      </div>
+    </section>
+
+    <!-- Results (shared) -->
+    <section id="results" class="results" hidden>
+      <div class="results-header">
+        <h2>Transcribed Text</h2>
+        <div class="results-meta">
+          <span id="confidence"></span>
+          <span id="processing-time"></span>
+        </div>
+      </div>
+      <textarea id="output" readonly placeholder="Transcribed text will appear here..."></textarea>
+      <button id="copy-btn" class="btn btn-secondary">Copy to Clipboard</button>
+    </section>
+
+    <!-- Progress -->
+    <div id="progress-container" class="progress-container" hidden>
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+      <span id="progress-text" class="progress-text">Initializing...</span>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="js/preprocess.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/ocr.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
