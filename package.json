@@ -1,0 +1,10 @@
+{
+  "name": "scribble-readable",
+  "version": "1.0.0",
+  "description": "Convert handwriting into typed text in real time using your camera",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": ["ocr", "handwriting", "tesseract", "camera"],
+  "license": "MIT"
+}
